@@ -31,7 +31,9 @@ const corsOptions = {
     credentials: true // Allow cookies to be sent from the frontend
 };
 app.use(cors(corsOptions));
-
+app.get("/", (req, res) => {
+    res.send("hello aditya!!");
+});
 mongoose.connect(process.env.MONGO_URL)
 app.get("/test", (req, res) => {
     res.json("test ok");
