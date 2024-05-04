@@ -13,7 +13,7 @@ const multer = require("multer");
 const imageDownloader = require("image-downloader");
 const fs = require("fs");
 const BASE_URL = process.env.BASE_URL;
-const PORT = process.env.PORT;
+const port = process.env.PORT || 4000;
 const Booking = require("./models/Booking.js");
 require("dotenv").config()
 const app = express();
@@ -25,10 +25,12 @@ app.use('/uploads', express.static(__dirname + '/uploads'))
 //     origin: 'http://localhost:5173',
 
 // }));
-app.use(cors({
-    origin: "https://effulgent-valkyrie-bbaf59.netlify.app"// Replace this with your Netlify frontend URL
-}));
-
+// Configure CORS
+const corsOptions = {
+    origin: "https://effulgent-valkyrie-bbaf59.netlify.app",
+    credentials: true // Allow cookies to be sent from the frontend
+};
+app.use(cors(corsOptions));
 
 mongoose.connect(process.env.MONGO_URL)
 app.get("/test", (req, res) => {
@@ -219,4 +221,7 @@ app.get("/bookings", async (req, res) => {
     res.json(await Booking.find({ user: userData.id }).populate('place'))
 })
 
-app.listen(4000);
+// app.listen(4000);
+app.listen(port, () => {
+    console.log(`App listening on ${port}`);
+});
