@@ -12,6 +12,8 @@ const bcryptSalt = bcrypt.genSaltSync(10);
 const multer = require("multer");
 const imageDownloader = require("image-downloader");
 const fs = require("fs");
+const BASE_URL = process.env.BASE_URL;
+const PORT = process.env.PORT;
 const Booking = require("./models/Booking.js");
 require("dotenv").config()
 const app = express();
