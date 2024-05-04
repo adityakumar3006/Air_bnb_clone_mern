@@ -26,11 +26,19 @@ app.use('/uploads', express.static(__dirname + '/uploads'))
 
 // }));
 // Configure CORS
-const corsOptions = {
-    origin: "https://effulgent-valkyrie-bbaf59.netlify.app",
-    credentials: true // Allow cookies to be sent from the frontend
-};
-app.use(cors(corsOptions));
+// const corsOptions = {
+//     origin: "https://effulgent-valkyrie-bbaf59.netlify.app",
+//     credentials: true // Allow cookies to be sent from the frontend
+// };
+//app.use(cors(corsOptions));
+app.use(cors()); // Enable CORS for all routes
+
+// Custom CORS middleware to allow specific headers
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 app.get("/", (req, res) => {
     res.send("hello aditya!!");
 });
