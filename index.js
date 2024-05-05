@@ -31,7 +31,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'))
 
 app.use(cors({
 
-    origin: 'https://taupe-praline-cc894f.netlify.app',
+    origin: 'https://hilarious-praline-c260f0.netlify.app',
 
     credentials: true,
 
