@@ -36,7 +36,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'))
 app.use((req, res, next) => {
     res.setHeader(
         "Access-Control-Allow-Origin",
-        "https://courageous-pie-d800f4.netlify.app",
+        "https://zesty-starship-5ebef1.netlify.app",
     );
     res.setHeader(
         "Access-Control-Allow-Methods",
