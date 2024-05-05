@@ -63,14 +63,12 @@ app.get("/", (req, res) => {
     res.send("hello aditya!!");
 });
 //mongoose.connect(process.env.MONGO_URL)
-const fetchData = async () => {
-    try {
-        await mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
-        console.log("Connected to MongoDB");
-    } catch (err) {
-        console.error("Error connecting to MongoDB:", err);
-        throw err; // Throw the error so that it can be caught by the caller
-    }
+try {
+    mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
+    console.log("Connected to MongoDB");
+} catch (err) {
+    console.error("Error connecting to MongoDB:", err);
+    throw err; // Throw the error so that it can be caught by the caller
 }
 
 app.get("/test", (req, res) => {
