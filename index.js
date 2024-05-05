@@ -31,7 +31,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'))
 
 app.use(cors({
 
-    origin: 'https://legendary-palmier-2d8a4c.netlify.app',
+    origin: 'https://endearing-semifreddo-c2bc2f.netlify.app',
 
     credentials: true,
 
