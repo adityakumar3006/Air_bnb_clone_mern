@@ -31,7 +31,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'))
 
 app.use(cors({
 
-    origin: 'https://super-smakager-773310.netlify.app',
+    origin: 'https://glistening-dolphin-73f1ca.netlify.app',
 
     credentials: true,
 
