@@ -15,6 +15,7 @@ const fs = require("fs");
 const BASE_URL = process.env.BASE_URL;
 const port = process.env.PORT || 4000;
 const Booking = require("./models/Booking.js");
+const mime = require("mime-types");
 require("dotenv").config()
 const app = express();
 app.use(express.json());
@@ -152,6 +153,9 @@ app.post("/logout", (req, res) => {
 //adityakr4005
 //FHqJeN2dSj66KTQ2
 //console.log(__dirname)
+
+// old code below
+
 app.post("/upload-by-link", async (req, res) => {
     const { link } = req.body;
     const newName = 'photo' + Date.now() + '.jpg';
