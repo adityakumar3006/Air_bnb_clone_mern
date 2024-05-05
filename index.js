@@ -31,7 +31,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'))
 
 app.use(cors({
 
-    origin: 'https://spectacular-pixie-83feb9.netlify.app',
+    origin: 'https://bejewelled-beijinho-c27340.netlify.app',
 
     credentials: true,
 
