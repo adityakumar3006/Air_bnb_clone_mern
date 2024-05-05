@@ -30,7 +30,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'))
 
 app.use(cors({
 
-    origin: 'https://subtle-alpaca-43f753.netlify.app',
+    origin: 'https://splendorous-bienenstitch-9b233b.netlify.app',
 
     credentials: true,
 
