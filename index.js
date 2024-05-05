@@ -31,7 +31,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'))
 
 app.use(cors({
 
-    origin: 'https://bejewelled-beijinho-c27340.netlify.app',
+    origin: 'https://legendary-palmier-2d8a4c.netlify.app',
 
     credentials: true,
 
