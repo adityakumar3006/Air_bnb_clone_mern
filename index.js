@@ -31,7 +31,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'))
 
 app.use(cors({
 
-    origin: 'https://endearing-semifreddo-c2bc2f.netlify.app',
+    origin: 'https://super-smakager-773310.netlify.app',
 
     credentials: true,
 
