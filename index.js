@@ -31,7 +31,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'))
 
 app.use(cors({
 
-    origin: 'https://clever-snickerdoodle-9a14e3.netlify.app',
+    origin: 'https://willowy-begonia-16e1be.netlify.app',
 
     credentials: true,
 
