@@ -184,6 +184,8 @@ app.post('/upload', photosMiddleWare.array('photos', 100), (req, res) => {
     res.json(uploadedFiles);
 })
 app.post("/places", (req, res) => {
+    mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
+
     const { token } = req.cookies;
     const { title, address, addedPhotos,
         perks, description,
@@ -205,6 +207,8 @@ app.post("/places", (req, res) => {
 });
 
 app.get("/user-places", (req, res) => {
+    mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
+
     //grab userid using token
     const { token } = req.cookies;
 
@@ -214,11 +218,15 @@ app.get("/user-places", (req, res) => {
     })
 })
 app.get("/places/:id", async (req, res) => {
+    mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
+
     const { id } = req.params;
     res.json(await Place.findById(id));
 })
 
 app.put("/places", async (req, res) => {
+    mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
+
     const { token } = req.cookies;
     const { id, title, address, addedPhotos,
         perks, description,
@@ -243,10 +251,14 @@ app.put("/places", async (req, res) => {
 })
 
 app.get("/places", async (req, res) => {
+    mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
+
     res.json(await Place.find());
 })
 
 app.post("/bookings", async (req, res) => {
+    mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
+
     const userData = await getUserDataFromReq(req);
 
     const { place, price, checkOut,
@@ -263,25 +275,12 @@ app.post("/bookings", async (req, res) => {
     })
 })
 
-// app.get("/bookings", async (req, res) => {
-//     const userData = await getUserDataFromReq(req);
-//     res.json(await Booking.find({ user: userData.id }).populate('place'))
-// })
-
-
-//---------------------------------------gpt
 app.get("/bookings", async (req, res) => {
-    try {
-        const userData = await getUserDataFromReq(req);
-        const bookings = await Booking.find({ user: userData.id }).populate('place');
-        console.log("Bookings:", bookings); // Log the bookings response
-        res.json(bookings);
-    } catch (error) {
-        console.error("Error fetching bookings:", error);
-        res.status(500).json({ error: "An error occurred while fetching bookings." });
-    }
-});
+    mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
 
+    const userData = await getUserDataFromReq(req);
+    res.json(await Booking.find({ user: userData.id }).populate('place'))
+})
 
 // app.listen(4000);
 app.listen(port, () => {
