@@ -263,10 +263,25 @@ app.post("/bookings", async (req, res) => {
     })
 })
 
+// app.get("/bookings", async (req, res) => {
+//     const userData = await getUserDataFromReq(req);
+//     res.json(await Booking.find({ user: userData.id }).populate('place'))
+// })
+
+
+//---------------------------------------gpt
 app.get("/bookings", async (req, res) => {
-    const userData = await getUserDataFromReq(req);
-    res.json(await Booking.find({ user: userData.id }).populate('place'))
-})
+    try {
+        const userData = await getUserDataFromReq(req);
+        const bookings = await Booking.find({ user: userData.id }).populate('place');
+        console.log("Bookings:", bookings); // Log the bookings response
+        res.json(bookings);
+    } catch (error) {
+        console.error("Error fetching bookings:", error);
+        res.status(500).json({ error: "An error occurred while fetching bookings." });
+    }
+});
+
 
 // app.listen(4000);
 app.listen(port, () => {
