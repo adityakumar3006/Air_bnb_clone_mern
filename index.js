@@ -80,15 +80,36 @@ try {
 app.get("/test", (req, res) => {
     res.json("test ok");
 })
+// function getUserDataFromReq(req) {
+//     return new Promise((resolve, reject) => {
+//         jwt.verify(req.cookies.token, jwtsecret, {}, async (err, userData) => {
+//             if (err) throw err;
+//             resolve(userData);
+//         });
+//     })
+
+// }
 function getUserDataFromReq(req) {
     return new Promise((resolve, reject) => {
-        jwt.verify(req.cookies.token, jwtsecret, {}, async (err, userData) => {
-            if (err) throw err;
+        const token = req.cookies.token;
+        if (!token) {
+            // If token is not provided, reject the promise
+            reject(new Error('JWT token not provided'));
+            return;
+        }
+
+        jwt.verify(token, jwtsecret, {}, async (err, userData) => {
+            if (err) {
+                // If there's an error during token verification, reject the promise
+                reject(err);
+                return;
+            }
+            // If verification is successful, resolve the promise with user data
             resolve(userData);
         });
-    })
-
+    });
 }
+
 
 //register 
 app.post('/register', async (req, res) => {
@@ -275,13 +296,23 @@ app.post("/bookings", async (req, res) => {
     })
 })
 
+// app.get("/bookings", async (req, res) => {
+//     mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
+
+//     const userData = await getUserDataFromReq(req);
+//     res.json(await Booking.find({ user: userData.id }).populate('place'))
+// })
+
 app.get("/bookings", async (req, res) => {
-    mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
-
-    const userData = await getUserDataFromReq(req);
-    res.json(await Booking.find({ user: userData.id }).populate('place'))
-})
-
+    try {
+        const userData = await getUserDataFromReq(req);
+        const bookings = await Booking.find({ user: userData.id }).populate('place');
+        res.json(bookings);
+    } catch (err) {
+        console.error("Error retrieving bookings:", err);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 // app.listen(4000);
 app.listen(port, () => {
     console.log(`App listening on ${port}`);
