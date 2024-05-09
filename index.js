@@ -36,35 +36,7 @@ app.use(cors({
     credentials: true,
 
 }));
-// Configure CORS
-// const corsOptions = {
-//     origin: "https://courageous-pie-d800f4.netlify.app",
-//     credentials: true // Allow cookies to be sent from the frontend
-// };
-// app.use(cors(corsOptions));
-// Enable CORS for all routes
 
-// app.use((req, res, next) => {
-//     res.setHeader(
-//         "Access-Control-Allow-Origin",
-//         "https://subtle-alpaca-43f753.netlify.app",
-//     );
-//     res.setHeader(
-//         "Access-Control-Allow-Methods",
-//         "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,CONNECT,TRACE"
-//     );
-//     res.setHeader(
-//         "Access-Control-Allow-Headers",
-//         "Content-Type, Authorization, X-Content-Type-Options, Accept, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
-//     );
-//     res.setHeader("Access-Control-Allow-Credentials", true);
-//     res.setHeader("Access-Control-Allow-Private-Network", true);
-//     //  Firefox caps this at 24 hours (86400 seconds). Chromium (starting in v76) caps at 2 hours (7200 seconds). The default value is 5 seconds.
-//     res.setHeader("Access-Control-Max-Age", 7200);
-
-//     next();
-// });
-// Custom CORS middleware to allow specific header
 app.get("/", (req, res) => {
     res.send("hello aditya!!");
 });
@@ -105,6 +77,7 @@ function getUserDataFromReq(req) {
                 reject(err);
                 return;
             }
+            console.log("User data:", userData);
             // If verification is successful, resolve the promise with user data
             resolve(userData);
         });
