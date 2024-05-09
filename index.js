@@ -5,7 +5,7 @@ const User = require("./models/User.js");
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const Place = require("./models/Place.js");
-const jwtsecret = 'sadgashjhjhjdasjkanjxsaw4d'
+const jwtsecret = 'sadgashjhjhjdasjkanjxsaw4d';
 const bcryptSalt = bcrypt.genSaltSync(10);
 const multer = require("multer");
 const imageDownloader = require("image-downloader");
@@ -31,10 +31,6 @@ try {
     throw err;
 }
 
-app.get("/test", (req, res) => {
-    res.json("test ok");
-})
-
 function getUserDataFromReq(req) {
     return new Promise((resolve, reject) => {
         const token = req.headers.authorization.split(" ")[1];
@@ -50,6 +46,20 @@ function getUserDataFromReq(req) {
             resolve(userData);
         });
     });
+}
+
+function extractToken(req, res, next) {
+    try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            throw new Error("Authorization header missing or invalid");
+        }
+        const token = authHeader.split(" ")[1];
+        req.token = token;
+        next();
+    } catch (error) {
+        res.status(401).json({ error: error.message });
+    }
 }
 
 app.post('/register', async (req, res) => {
@@ -88,25 +98,18 @@ app.post('/login', async (req, res) => {
     }
 })
 
-app.get('/profile', async (req, res) => {
-    const token = req.headers.authorization.split(" ")[1];
-    if (token) {
-        jwt.verify(token, jwtsecret, {}, async (err, userData) => {
-            if (err) throw err;
-            const { name, email, _id } = await User.findById(userData.id);
-            res.json({ name, email, _id });
-        })
-    } else {
-        res.status(401).json(null)
+app.get('/profile', extractToken, async (req, res) => {
+    try {
+        const userData = jwt.verify(req.token, jwtsecret);
+        const { name, email, _id } = await User.findById(userData.id);
+        res.json({ name, email, _id });
+    } catch (error) {
+        res.status(401).json({ error: "Invalid token" });
     }
 })
 
-app.post("/logout", (req, res) => {
-    res.json(true);
-})
-
-app.post("/places", async (req, res) => {
-    const token = req.headers.authorization.split(" ")[1];
+app.post("/places", extractToken, async (req, res) => {
+    const token = req.token;
     const { title, address, addedPhotos, perks, description, extraInfo, checkOut, checkIn, maxGuests, price } = req.body;
     jwt.verify(token, jwtsecret, {}, async (err, userData) => {
         if (err) throw err;
@@ -122,22 +125,22 @@ app.post("/places", async (req, res) => {
     });
 })
 
-app.get("/user-places", async (req, res) => {
-    const token = req.headers.authorization.split(" ")[1];
+app.get("/user-places", extractToken, async (req, res) => {
+    const token = req.token;
     jwt.verify(token, jwtsecret, {}, async (err, userData) => {
         const { id } = userData;
         res.json(await Place.find({ owner: id }))
     })
 })
 
-app.get("/places/:id", async (req, res) => {
-    const token = req.headers.authorization.split(" ")[1];
+app.get("/places/:id", extractToken, async (req, res) => {
+    const token = req.token;
     const { id } = req.params;
     res.json(await Place.findById(id));
 })
 
-app.put("/places", async (req, res) => {
-    const token = req.headers.authorization.split(" ")[1];
+app.put("/places", extractToken, async (req, res) => {
+    const token = req.token;
     const { id, title, address, addedPhotos, perks, description, extraInfo, checkOut, checkIn, maxGuests, price } = req.body;
     jwt.verify(token, jwtsecret, {}, async (err, userData) => {
         const placeDoc = await Place.findById(id);
@@ -159,8 +162,8 @@ app.get("/places", async (req, res) => {
     res.json(await Place.find());
 })
 
-app.post("/bookings", async (req, res) => {
-    const token = req.headers.authorization.split(" ")[1];
+app.post("/bookings", extractToken, async (req, res) => {
+    const token = req.token;
     const userData = await getUserDataFromReq(req);
     const { place, price, checkOut, checkIn, numberOfGuests, name, phone } = req.body;
     Booking.create({
@@ -174,9 +177,9 @@ app.post("/bookings", async (req, res) => {
     })
 })
 
-app.get("/bookings", async (req, res) => {
+app.get("/bookings", extractToken, async (req, res) => {
     try {
-        const token = req.headers.authorization.split(" ")[1];
+        const token = req.token;
         const userData = await getUserDataFromReq(req);
         const bookings = await Booking.find({ user: userData.id }).populate('place');
         res.json(bookings);
@@ -185,6 +188,10 @@ app.get("/bookings", async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 });
+
+app.post("/logout", (req, res) => {
+    res.json(true);
+})
 
 app.listen(port, () => {
     console.log(`App listening on ${port}`);
