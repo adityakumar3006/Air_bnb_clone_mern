@@ -19,7 +19,7 @@ app.use(express.json());
 app.use('/uploads', express.static(__dirname + '/uploads'))
 
 app.use(cors({
-    origin: 'https://teal-eclair-b924f8.netlify.app',
+    origin: 'https://neon-starship-5bcc9b.netlify.app',
     credentials: true,
 }));
 
@@ -176,6 +176,21 @@ app.post("/bookings", extractToken, async (req, res) => {
         throw err;
     })
 })
+app.get("/bookings/:id", extractToken, async (req, res) => {
+    try {
+        const token = req.token;
+        const userData = await getUserDataFromReq(req);
+        const booking = await Booking.findOne({ _id: req.params.id, user: userData.id }).populate('place');
+        if (!booking) {
+            return res.status(404).json({ error: "Booking not found" });
+        }
+        res.json(booking);
+    } catch (err) {
+        console.error("Error retrieving booking:", err);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
 
 app.get("/bookings", extractToken, async (req, res) => {
     try {
