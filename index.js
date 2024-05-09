@@ -19,7 +19,7 @@ app.use(express.json());
 app.use('/uploads', express.static(__dirname + '/uploads'))
 
 app.use(cors({
-    origin: 'https://darling-pastelito-7761f7.netlify.app',
+    origin: 'https://teal-eclair-b924f8.netlify.app',
     credentials: true,
 }));
 
