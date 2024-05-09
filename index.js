@@ -31,7 +31,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'))
 
 app.use(cors({
 
-    origin: 'https://willowy-begonia-16e1be.netlify.app',
+    origin: 'https://harmonious-gecko-be82e6.netlify.app',
 
     credentials: true,
 
@@ -92,6 +92,7 @@ app.get("/test", (req, res) => {
 function getUserDataFromReq(req) {
     return new Promise((resolve, reject) => {
         const token = req.cookies.token;
+
         if (!token) {
             // If token is not provided, reject the promise
             reject(new Error('JWT token not provided'));
