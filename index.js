@@ -19,7 +19,7 @@ app.use(express.json());
 app.use('/uploads', express.static(__dirname + '/uploads'))
 
 app.use(cors({
-    origin: 'https://air-bnb-clone1.netlify.app',
+    origin: 'https://neon-starship-5bcc9b.netlify.app',
     credentials: true,
 }));
 
